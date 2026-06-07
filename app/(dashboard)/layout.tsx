@@ -1,49 +1,35 @@
 'use client';
 
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { getUserRole } from "@/lib/roles";
+import { useState } from 'react';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { Header } from '@/components/layout/Header';
+import { MobileNav } from '@/components/layout/MobileNav';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isLoaded } = useUser();
-  const router = useRouter();
-
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    router.push("/sign-in");
-    return null;
-  }
-
-  const userRole = getUserRole(user);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <div>
-      <div className="header">
-        <div>
-          <h1>
-            <Link href="/" style={{ color: "#0070f3", textDecoration: "none" }}>
-              Sketchr Dashboard
-            </Link>
-          </h1>
-          <p style={{ fontSize: "0.9rem", color: "#666", marginTop: "0.25rem" }}>
-            Role: <strong>{userRole}</strong>
-          </p>
-        </div>
-        <div className="nav">
-          <UserButton afterSignOutUrl="/" />
-        </div>
-      </div>
+    <div className="min-h-screen bg-stone-50">
+      {/* Sidebar */}
+      <Sidebar />
 
-      <main className="container">{children}</main>
+      {/* Mobile Navigation */}
+      <MobileNav isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
+
+      {/* Main Content */}
+      <div className="md:ml-64 flex flex-col">
+        {/* Header */}
+        <Header onMobileMenuOpen={() => setMobileNavOpen(true)} />
+
+        {/* Page Content */}
+        <main className="flex-1 p-4 md:p-6 lg:p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

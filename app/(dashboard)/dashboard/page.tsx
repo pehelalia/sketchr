@@ -1,63 +1,26 @@
-'use client';
-
-import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
-import { getUserRole, isAdmin } from "@/lib/roles";
-
 export default function DashboardPage() {
-  const { user } = useUser();
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  const userRole = getUserRole(user);
-  const isAdminUser = isAdmin(user);
-
   return (
-    <div>
-      <h1>Welcome, {user.firstName || "Artist"}!</h1>
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg border border-stone-200 p-6">
+        <h2 className="text-2xl font-bold text-stone-900 mb-2">Welcome back</h2>
+        <p className="text-stone-600">
+          Track your artistic progress and document your creative journey.
+        </p>
+      </div>
 
-      <div style={{ marginTop: "2rem", display: "grid", gap: "2rem" }}>
-        <div className="card">
-          <h2>Your Profile</h2>
-          <div style={{ marginTop: "1rem" }}>
-            <p>
-              <strong>Email:</strong> {user.primaryEmailAddress?.emailAddress}
-            </p>
-            <p style={{ marginTop: "0.5rem" }}>
-              <strong>Role:</strong> {userRole}
-            </p>
-            <p style={{ marginTop: "0.5rem" }}>
-              <strong>Member Since:</strong>{" "}
-              {user.createdAt
-                ? new Date(user.createdAt).toLocaleDateString()
-                : "N/A"}
-            </p>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg border border-stone-200 p-6">
+          <h3 className="font-semibold text-stone-900 mb-2">Total Entries</h3>
+          <p className="text-3xl font-bold text-stone-900">0</p>
         </div>
-
-        <div className="card">
-          <h2>Available Sections</h2>
-          <div className="links" style={{ marginTop: "1rem" }}>
-            <Link href="/dashboard/gallery">Gallery</Link>
-            <Link href="/dashboard/upload">Upload Sketch</Link>
-            {isAdminUser && <Link href="/dashboard/admin">Admin Panel</Link>}
-          </div>
+        <div className="bg-white rounded-lg border border-stone-200 p-6">
+          <h3 className="font-semibold text-stone-900 mb-2">Current Streak</h3>
+          <p className="text-3xl font-bold text-stone-900">0</p>
         </div>
-
-        {isAdminUser && (
-          <div className="card" style={{ background: "#f0f7ff" }}>
-            <h2>🔒 Admin Access</h2>
-            <p style={{ marginTop: "1rem", color: "#666" }}>
-              You have admin privileges. You can access the admin panel to
-              manage users and content.
-            </p>
-            <Link href="/dashboard/admin">
-              <button style={{ marginTop: "1rem" }}>Go to Admin Panel</button>
-            </Link>
-          </div>
-        )}
+        <div className="bg-white rounded-lg border border-stone-200 p-6">
+          <h3 className="font-semibold text-stone-900 mb-2">This Month</h3>
+          <p className="text-3xl font-bold text-stone-900">0</p>
+        </div>
       </div>
     </div>
   );
